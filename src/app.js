@@ -1,44 +1,28 @@
 const express = require('express');
-const models = require('../models');
+const bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
+
+const captcha = require('./routes/captcha');
+const reg = require('./routes/reg');
+const login = require('./routes/login');
+const notFound = require('./routes/not-found');
+const handleError = require('./routes/error');
 
 const app = express();
-const port = 3000;
 
-app.get('/create', async (req, res) => {
-    const { firstName, lastName, email } = req.query;
-    const user = await models.User.create({
-        firstName,
-        lastName,
-        email
-    });
+app.use(bodyParser.urlencoded({
+    extended: true,
+}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(methodOverride());
 
-    res.json({
-        msg: '创建成功',
-        user,
-    })
-});
+app.use(captcha);
+app.use(reg);
+app.use(login);
 
-app.get('/users', async (req, res) => {
-    const users = await models.User.findAll();
+app.use(notFound);
+app.use(handleError);
 
-    res.json({
-        msg: '查询成功',
-        users,
-    });
-});
-
-app.get('/user/:id', async (req, res) => {
-    const { id } = req.params;
-    const user = await models.User.findOne({
-        where: {
-            id,
-        }
-    });
-
-    res.json({
-        msg: '查询成功',
-        user: user || [],
-    });
-});
-
-app.listen(port, () => console.log(`服务器已启动 port ${port}!`));
+app.listen(3000, () => console.log(`服务器已启动!`));
