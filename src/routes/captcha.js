@@ -7,12 +7,15 @@ const router = express.Router();
 const svgCaptcha = require('svg-captcha');
 
 router.get('/captcha', (req, res, next) => {
+
+    /** 创建验证码 */
     const captcha = svgCaptcha.create({
         size: 4,
         ignoreChars: '0o1i',
         noise: 6,
         color: true,
         background: '#ccc',
+        height: '32',
     });
 
     res.type('svg');
@@ -20,7 +23,7 @@ router.get('/captcha', (req, res, next) => {
     console.log(captcha.text, '注册验证码--存cookie');
 
     res.status(200)
-        .cookie(captcha, captcha.text)
+        .cookie('captcha', captcha.text)
         .send(captcha.data);
 });
 

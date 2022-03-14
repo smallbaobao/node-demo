@@ -14,14 +14,6 @@ router.post('/reg', async (req, res, next) => {
         const captchaCookie = req.cookies.captcha || '';
         console.log(captchaCookie, '注册验证码--取cookie');
 
-        if (!name || !password) {
-            res.json({
-                message: 'name 或 password为空',
-            });
-
-            return;
-        }
-
         if (captcha.toUpperCase() !== captchaCookie.toUpperCase()) {
             res.json({
                 message: '验证码不正确',
@@ -30,7 +22,15 @@ router.post('/reg', async (req, res, next) => {
             return;
         }
 
-        // 兜底处理
+        if (!name || !password) {
+            res.json({
+                message: 'name 或 password为空',
+            });
+
+            return;
+        }
+
+        // 查找是否用户已存在
         const userCreated = await models.User.findOne({
             where: {
                 name,
