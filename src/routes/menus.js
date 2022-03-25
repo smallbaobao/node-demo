@@ -35,29 +35,28 @@ router.post("/createMenu", async (req, res, next) => {
     return;
   }
 
-  const menus = await models.Menus.findOne({
+  const [menu, created] = await models.Menus.findOrCreate({
     where: {
       [Op.or]: [{ name }, { path }],
     },
+    defaults: {
+      parentId: parentId || 0,
+      name,
+      path,
+    },
   });
 
-  if (menus && !menus.length) {
+  if (created) {
     res.json({
-      message: "菜单名称或路径已存在",
+      message: "新增成功",
+      menu,
     });
 
     return;
   }
 
-  const menu = await models.Menus.create({
-    parentId: parentId || 0,
-    name,
-    path,
-  });
-
   res.json({
-    message: "新增成功",
-    menu,
+    message: "菜单名称或路径已存在",
   });
 });
 

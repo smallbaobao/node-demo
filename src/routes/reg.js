@@ -26,30 +26,25 @@ router.post("/reg", async (req, res, next) => {
       return;
     }
 
-    // 查找是否用户已存在
-    const userCreated =
-      (await models.User.findOne({
-        where: {
-          name,
-        },
-      })) || {};
+    const [user, created] = await models.User.findOrCreate({
+      where: { name },
+      defaults: {
+        name,
+        password,
+      },
+    });
 
-    if (userCreated.name === name) {
+    if (created) {
       res.json({
-        message: "用户已注册",
+        message: "注册成功",
+        user,
       });
 
       return;
     }
 
-    const user = await models.User.create({
-      name,
-      password,
-    });
-
     res.json({
-      message: "注册成功",
-      user,
+      message: "用户已注册",
     });
   } catch (error) {
     next(error);
