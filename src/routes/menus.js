@@ -99,4 +99,31 @@ router.post("/updateMenu", async (req, res, next) => {
   });
 });
 
+/** 删除菜单 */
+router.get("/deleteMenu", async (req, res, next) => {
+  const { id } = req.query;
+
+  if (!id) {
+    res.json({
+      message: "id不存在",
+    });
+
+    return;
+  }
+
+  try {
+    const menu = await models.Menus.destroy({
+      where: { id },
+    });
+
+    res.json({
+      message: "删除成功",
+      menu,
+      id,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
