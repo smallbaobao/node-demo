@@ -9,6 +9,7 @@ router.post("/login", async (req, res, next) => {
 
     if (!name || !password) {
       res.json({
+        success: false,
         message: "name 或 password为空",
       });
 
@@ -24,6 +25,7 @@ router.post("/login", async (req, res, next) => {
 
     if (!user) {
       res.json({
+        success: false,
         message: "用户不存在",
       });
 
@@ -31,6 +33,7 @@ router.post("/login", async (req, res, next) => {
     }
 
     res.json({
+      success: true,
       message: "登录成功",
       name,
     });

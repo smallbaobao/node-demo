@@ -12,6 +12,7 @@ router.post("/reg", async (req, res, next) => {
 
     if (captcha.toUpperCase() !== captchaCookie.toUpperCase()) {
       res.json({
+        success: false,
         message: "验证码不正确",
       });
 
@@ -20,6 +21,7 @@ router.post("/reg", async (req, res, next) => {
 
     if (!name || !password) {
       res.json({
+        success: false,
         message: "name 或 password为空",
       });
 
@@ -36,6 +38,7 @@ router.post("/reg", async (req, res, next) => {
 
     if (created) {
       res.json({
+        success: true,
         message: "注册成功",
         user,
       });
@@ -44,6 +47,7 @@ router.post("/reg", async (req, res, next) => {
     }
 
     res.json({
+      success: false,
       message: "用户已注册",
     });
   } catch (error) {

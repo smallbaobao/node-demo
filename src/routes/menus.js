@@ -10,6 +10,7 @@ router.get("/menus", async (req, res, next) => {
     const menus = await models.Menus.findAll();
 
     res.json({
+      success: true,
       message: "查询成功",
       menus,
     });
@@ -29,6 +30,7 @@ router.post("/createMenu", async (req, res, next) => {
 
   if (!name || !path) {
     res.json({
+      success: false,
       message: "请填写菜单名称或路径",
     });
 
@@ -48,6 +50,7 @@ router.post("/createMenu", async (req, res, next) => {
 
   if (created) {
     res.json({
+      success: true,
       message: "新增成功",
       menu,
     });
@@ -56,6 +59,7 @@ router.post("/createMenu", async (req, res, next) => {
   }
 
   res.json({
+    success: false,
     message: "菜单名称或路径已存在",
   });
 });
@@ -71,6 +75,7 @@ router.post("/updateMenu", async (req, res, next) => {
 
   if (!id) {
     res.json({
+      success: false,
       message: "菜单id不存在",
     });
 
@@ -94,6 +99,7 @@ router.post("/updateMenu", async (req, res, next) => {
   });
 
   res.json({
+    success: true,
     message: "更新成功",
     id: menu[0],
   });
@@ -105,6 +111,7 @@ router.get("/deleteMenu", async (req, res, next) => {
 
   if (!id) {
     res.json({
+      success: false,
       message: "id不存在",
     });
 
@@ -117,6 +124,7 @@ router.get("/deleteMenu", async (req, res, next) => {
     });
 
     res.json({
+      success: true,
       message: "删除成功",
       menu,
       id,
